@@ -172,9 +172,9 @@ func HandleLogin(
 
 		// If the user account has not completed registration,
 		// redirect to the registration form.
-		if len(user.Email) == 0 && user.Created > 1619841600 {
-			redirect = "/register"
-		}
+		//if len(user.Email) == 0 && user.Created > 1619841600 {
+		//	redirect = "/register"
+		//}
 
 		logger.Debugf("authentication successful")
 
