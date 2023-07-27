@@ -1,6 +1,4 @@
 #!/bin/sh
-GOARCH=amd64
-GOOS=linux
 
 echo "building docker images for ${GOOS}/${GOARCH} ..."
 
