@@ -17,6 +17,7 @@ package builds
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/drone/drone/core"
@@ -34,12 +35,12 @@ func HandleList(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
-			branch    = r.FormValue("branch")
-			tag       = r.FormValue("tag")
-			page      = r.FormValue("page")
-			perPage   = r.FormValue("per_page")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			branch       = r.FormValue("branch")
+			tag          = r.FormValue("tag")
+			page         = r.FormValue("page")
+			perPage      = r.FormValue("per_page")
 		)
 		offset, _ := strconv.Atoi(page)
 		limit, _ := strconv.Atoi(perPage)

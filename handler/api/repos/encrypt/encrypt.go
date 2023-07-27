@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone/core"
@@ -37,7 +38,7 @@ type respEncrypted struct {
 // requests to create an encrypted secret.
 func Handler(repos core.RepositoryStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		namespace := chi.URLParam(r, "owner")
+		namespace, _ := url.QueryUnescape(chi.URLParam(r, "owner"))
 		name := chi.URLParam(r, "name")
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

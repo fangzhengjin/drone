@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Drone Non-Commercial License
 // that can be found in the LICENSE file.
 
+//go:build !oss
 // +build !oss
 
 package card
@@ -11,6 +12,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/drone/drone/core"
@@ -30,8 +32,8 @@ func HandleCreate(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
 		)
 
 		buildNumber, err := strconv.ParseInt(chi.URLParam(r, "build"), 10, 64)

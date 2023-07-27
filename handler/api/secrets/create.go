@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Drone Non-Commercial License
 // that can be found in the LICENSE file.
 
+//go:build !oss
 // +build !oss
 
 package secrets
@@ -9,6 +10,7 @@ package secrets
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -33,9 +35,9 @@ func HandleCreate(secrets core.GlobalSecretStore) http.HandlerFunc {
 			render.BadRequest(w, err)
 			return
 		}
-
+		namespace, _ := url.QueryUnescape(chi.URLParam(r, "namespace"))
 		s := &core.Secret{
-			Namespace:       chi.URLParam(r, "namespace"),
+			Namespace:       namespace,
 			Name:            in.Name,
 			Data:            in.Data,
 			PullRequest:     in.PullRequest,

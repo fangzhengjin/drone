@@ -16,6 +16,7 @@ package acl
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/errors"
@@ -32,7 +33,7 @@ import (
 func CheckMembership(service core.OrganizationService, admin bool) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			namespace := chi.URLParam(r, "namespace")
+			namespace, _ := url.QueryUnescape(chi.URLParam(r, "namespace"))
 			log := logger.FromRequest(r)
 			ctx := r.Context()
 

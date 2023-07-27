@@ -187,7 +187,7 @@ func provideGitlabClient(config config.Config) *scm.Client {
 				Endpoint:     strings.TrimSuffix(config.GitLab.Server, "/") + "/oauth/token",
 				Source:       oauth2.ContextTokenSource(),
 			},
-			Base:   defaultTransport(config.GitLab.SkipVerify),
+			Base: defaultTransport(config.GitLab.SkipVerify),
 		},
 	}
 	return client

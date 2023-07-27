@@ -16,6 +16,7 @@ package acl
 
 import (
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/drone/drone/core"
@@ -38,9 +39,9 @@ func InjectRepository(
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			var (
-				ctx   = r.Context()
-				owner = chi.URLParam(r, "owner")
-				name  = chi.URLParam(r, "name")
+				ctx      = r.Context()
+				owner, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+				name     = chi.URLParam(r, "name")
 			)
 
 			log := logger.FromRequest(r).WithFields(

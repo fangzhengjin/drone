@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build nolimit
-// +build oss
+//go:build nolimit && oss
+// +build nolimit,oss
 
 package license
 

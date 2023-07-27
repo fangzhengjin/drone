@@ -1,7 +1,5 @@
 module github.com/drone/drone
 
-replace github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
-
 require (
 	github.com/99designs/httpsignatures-go v0.0.0-20170731043157-88528bf4ca7e
 	github.com/Azure/azure-storage-blob-go v0.7.0
@@ -58,6 +56,10 @@ require (
 	gopkg.in/yaml.v2 v2.3.0
 )
 
-replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
+replace (
+	github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
+	github.com/drone/drone-go => github.com/fangzhengjin/drone-go v1.7.2
+	github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
+)
 
 go 1.13

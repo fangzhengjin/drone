@@ -16,6 +16,7 @@ package branches
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -32,9 +33,9 @@ func HandleDelete(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
-			branch    = chi.URLParam(r, "*")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			branch       = chi.URLParam(r, "*")
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

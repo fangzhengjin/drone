@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Drone Non-Commercial License
 // that can be found in the LICENSE file.
 
+//go:build !oss
 // +build !oss
 
 package ccmenu
@@ -10,6 +11,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 
@@ -24,7 +26,7 @@ func Handler(
 	link string,
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		namespace := chi.URLParam(r, "owner")
+		namespace, _ := url.QueryUnescape(chi.URLParam(r, "owner"))
 		name := chi.URLParam(r, "name")
 
 		repo, err := repos.FindName(r.Context(), namespace, name)
