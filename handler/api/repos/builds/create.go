@@ -36,14 +36,14 @@ func HandleCreate(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			ctx       = r.Context()
-			namespace = url.QueryUnescape(chi.URLParam(r, "owner"))
-			name      = chi.URLParam(r, "name")
-			sha       = r.FormValue("commit")
-			branch    = r.FormValue("branch")
-			message   = r.FormValue("message")
-			action    = r.FormValue("action")
-			user, _   = request.UserFrom(ctx)
+			ctx          = r.Context()
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			sha          = r.FormValue("commit")
+			branch, _    = url.QueryUnescape(r.FormValue("branch"))
+			message      = r.FormValue("message")
+			action       = r.FormValue("action")
+			user, _      = request.UserFrom(ctx)
 		)
 
 		repo, err := repos.FindName(ctx, namespace, name)

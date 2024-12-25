@@ -36,7 +36,7 @@ func Handler(
 		namespace, _ := url.QueryUnescape(chi.URLParam(r, "owner"))
 		name := chi.URLParam(r, "name")
 		ref := r.FormValue("ref")
-		branch := r.FormValue("branch")
+		branch, _ := url.QueryUnescape(r.FormValue("branch"))
 		if branch != "" {
 			ref = "refs/heads/" + branch
 		}

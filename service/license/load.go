@@ -38,7 +38,7 @@ func Trial(provider string) *core.License {
 	switch provider {
 	case "gitea", "gogs":
 		return &core.License{
-			Kind:   core.LicenseTrial,
+			Kind:   core.LicenseStandard,
 			Repos:  0,
 			Users:  0,
 			Builds: 0,
@@ -46,10 +46,10 @@ func Trial(provider string) *core.License {
 		}
 	default:
 		return &core.License{
-			Kind:   core.LicenseTrial,
+			Kind:   core.LicenseStandard,
 			Repos:  0,
 			Users:  0,
-			Builds: 5000,
+			Builds: 0,
 			Nodes:  0,
 		}
 	}

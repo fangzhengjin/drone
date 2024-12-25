@@ -22,7 +22,7 @@ import (
 )
 
 // DefaultLicense is an empty license with no restrictions.
-var DefaultLicense = &core.License{Kind: core.LicenseFree}
+var DefaultLicense = &core.License{Kind: core.LicenseStandard}
 
 func Trial(string) *core.License         { return DefaultLicense }
 func Load(string) (*core.License, error) { return DefaultLicense, nil }

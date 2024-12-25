@@ -37,7 +37,7 @@ func HandleList(
 		var (
 			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
 			name         = chi.URLParam(r, "name")
-			branch       = r.FormValue("branch")
+			branch, _    = url.QueryUnescape(r.FormValue("branch"))
 			tag          = r.FormValue("tag")
 			page         = r.FormValue("page")
 			perPage      = r.FormValue("per_page")

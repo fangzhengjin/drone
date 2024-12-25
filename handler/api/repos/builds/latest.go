@@ -37,7 +37,7 @@ func HandleLast(
 			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
 			name         = chi.URLParam(r, "name")
 			ref          = r.FormValue("ref")
-			branch       = r.FormValue("branch")
+			branch, _    = url.QueryUnescape(r.FormValue("branch"))
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {
