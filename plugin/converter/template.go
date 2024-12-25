@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !oss
 // +build !oss
 
 package converter
@@ -44,15 +45,15 @@ var (
 func Template(templateStore core.TemplateStore, stepLimit uint64, sizeLimit uint64) core.ConvertService {
 	return &templatePlugin{
 		templateStore: templateStore,
-		stepLimit: stepLimit,
-		sizeLimit: sizeLimit,
+		stepLimit:     stepLimit,
+		sizeLimit:     sizeLimit,
 	}
 }
 
 type templatePlugin struct {
 	templateStore core.TemplateStore
-	stepLimit uint64
-	sizeLimit uint64
+	stepLimit     uint64
+	sizeLimit     uint64
 }
 
 func (p *templatePlugin) Convert(ctx context.Context, req *core.ConvertArgs) (*core.Config, error) {

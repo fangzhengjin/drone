@@ -9,6 +9,7 @@ package crons
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -24,9 +25,9 @@ func HandleFind(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
-			cron      = chi.URLParam(r, "cron")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			cron         = chi.URLParam(r, "cron")
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

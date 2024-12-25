@@ -9,6 +9,7 @@ package template
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -21,8 +22,8 @@ import (
 func HandleFind(templateStore core.TemplateStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			name      = chi.URLParam(r, "name")
-			namespace = chi.URLParam(r, "namespace")
+			name         = chi.URLParam(r, "name")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "namespace"))
 		)
 		template, err := templateStore.FindName(r.Context(), name, namespace)
 		if err != nil {

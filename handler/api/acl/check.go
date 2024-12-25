@@ -16,6 +16,7 @@ package acl
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/errors"
@@ -55,9 +56,9 @@ func CheckAccess(read, write, admin bool) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			var (
-				ctx   = r.Context()
-				owner = chi.URLParam(r, "owner")
-				name  = chi.URLParam(r, "name")
+				ctx      = r.Context()
+				owner, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+				name     = chi.URLParam(r, "name")
 			)
 			log := logger.FromRequest(r).
 				WithField("namespace", owner).

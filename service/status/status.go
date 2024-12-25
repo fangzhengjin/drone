@@ -17,6 +17,7 @@ package status
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/go-scm/scm"
@@ -75,7 +76,7 @@ func (s *service) Send(ctx context.Context, user *core.User, req *core.StatusInp
 			Number:      req.Build.DeployID,
 			Desc:        createDesc(req.Build.Status),
 			State:       convertStatus(req.Build.Status),
-			Target:      fmt.Sprintf("%s/%s/%d", s.base, req.Repo.Slug, req.Build.Number),
+			Target:      fmt.Sprintf("%s/%s/%s/%d", s.base, url.QueryEscape(req.Repo.Namespace), req.Repo.Name, req.Build.Number),
 			Environment: req.Build.Deploy,
 		})
 		return err
@@ -86,7 +87,7 @@ func (s *service) Send(ctx context.Context, user *core.User, req *core.StatusInp
 		Desc:   createDesc(req.Build.Status),
 		Label:  createLabel(s.name, req.Build.Event, req.Build.Deploy),
 		State:  convertStatus(req.Build.Status),
-		Target: fmt.Sprintf("%s/%s/%d", s.base, req.Repo.Slug, req.Build.Number),
+		Target: fmt.Sprintf("%s/%s/%s/%d", s.base, url.QueryEscape(req.Repo.Namespace), req.Repo.Name, req.Build.Number),
 	})
 	if err == scm.ErrNotSupported {
 		return nil

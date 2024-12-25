@@ -17,7 +17,6 @@ package syncer
 import (
 	"context"
 	"runtime/debug"
-	"strings"
 	"time"
 
 	"github.com/drone/drone/core"
@@ -104,14 +103,15 @@ func (s *Synchronizer) Sync(ctx context.Context, user *core.User) (*core.Batch, 
 			return nil, err
 		}
 		for _, repo := range repos {
-			if strings.Count(repo.Slug, "/") > 1 {
-				if logrus.GetLevel() == logrus.TraceLevel {
-					logger.WithField("namespace", repo.Namespace).
-						WithField("name", repo.Name).
-						WithField("uid", repo.UID).
-						Traceln("syncer: skipping subrepositories")
-				}
-			} else if repo.Archived {
+			//if strings.Count(repo.Slug, "/") > 1 {
+			//	if logrus.GetLevel() == logrus.TraceLevel {
+			//		logger.WithField("namespace", repo.Namespace).
+			//			WithField("name", repo.Name).
+			//			WithField("uid", repo.UID).
+			//			Traceln("syncer: skipping subrepositories")
+			//	}
+			//} else
+			if repo.Archived {
 				if logrus.GetLevel() == logrus.TraceLevel {
 					logger.WithField("namespace", repo.Namespace).
 						WithField("name", repo.Name).

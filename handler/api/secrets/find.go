@@ -9,6 +9,7 @@ package secrets
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -21,8 +22,8 @@ import (
 func HandleFind(secrets core.GlobalSecretStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "namespace")
-			name      = chi.URLParam(r, "name")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "namespace"))
+			name         = chi.URLParam(r, "name")
 		)
 		secret, err := secrets.FindName(r.Context(), namespace, name)
 		if err != nil {

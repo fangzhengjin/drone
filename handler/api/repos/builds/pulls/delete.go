@@ -16,6 +16,7 @@ package pulls
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/drone/drone/core"
@@ -32,9 +33,9 @@ func HandleDelete(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
-			number, _ = strconv.Atoi(chi.URLParam(r, "pull"))
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			number, _    = strconv.Atoi(chi.URLParam(r, "pull"))
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

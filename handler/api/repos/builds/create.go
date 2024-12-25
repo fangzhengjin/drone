@@ -16,6 +16,7 @@ package builds
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -36,7 +37,7 @@ func HandleCreate(
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			ctx       = r.Context()
-			namespace = chi.URLParam(r, "owner")
+			namespace = url.QueryUnescape(chi.URLParam(r, "owner"))
 			name      = chi.URLParam(r, "name")
 			sha       = r.FormValue("commit")
 			branch    = r.FormValue("branch")

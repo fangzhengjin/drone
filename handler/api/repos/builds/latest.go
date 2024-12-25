@@ -17,6 +17,7 @@ package builds
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -33,10 +34,10 @@ func HandleLast(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
-			ref       = r.FormValue("ref")
-			branch    = r.FormValue("branch")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
+			ref          = r.FormValue("ref")
+			branch       = r.FormValue("branch")
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

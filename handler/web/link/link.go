@@ -16,6 +16,7 @@ package link
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/go-scm/scm"
@@ -29,11 +30,11 @@ import (
 func HandleCommit(linker core.Linker) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			ctx       = r.Context()
-			namespace = chi.URLParam(r, "namespace")
-			name      = chi.URLParam(r, "name")
-			commit    = chi.URLParam(r, "commit")
-			ref       = r.FormValue("ref")
+			ctx          = r.Context()
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "namespace"))
+			name         = chi.URLParam(r, "name")
+			commit       = chi.URLParam(r, "commit")
+			ref          = r.FormValue("ref")
 		)
 		repo := scm.Join(namespace, name)
 		to, err := linker.Link(ctx, repo, ref, commit)
@@ -51,11 +52,11 @@ func HandleCommit(linker core.Linker) http.HandlerFunc {
 func HandleTree(linker core.Linker) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			ctx       = r.Context()
-			namespace = chi.URLParam(r, "namespace")
-			name      = chi.URLParam(r, "name")
-			ref       = chi.URLParam(r, "*")
-			commit    = r.FormValue("sha")
+			ctx          = r.Context()
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "namespace"))
+			name         = chi.URLParam(r, "name")
+			ref          = chi.URLParam(r, "*")
+			commit       = r.FormValue("sha")
 		)
 		repo := scm.Join(namespace, name)
 		to, err := linker.Link(ctx, repo, ref, commit)

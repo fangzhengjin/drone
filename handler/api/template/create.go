@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Drone Non-Commercial License
 // that can be found in the LICENSE file.
 
+//go:build !oss
 // +build !oss
 
 package template
@@ -9,6 +10,7 @@ package template
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"path/filepath"
 
 	"github.com/drone/drone/core"
@@ -31,7 +33,7 @@ type templateInput struct {
 // requests to create a new template.
 func HandleCreate(templateStore core.TemplateStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		namespace := chi.URLParam(r, "namespace")
+		namespace, _ := url.QueryUnescape(chi.URLParam(r, "namespace"))
 		in := new(templateInput)
 		err := json.NewDecoder(r.Body).Decode(in)
 		if err != nil {

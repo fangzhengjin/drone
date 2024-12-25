@@ -17,6 +17,7 @@ package repos
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -48,9 +49,9 @@ type (
 func HandleUpdate(repos core.RepositoryStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			owner = chi.URLParam(r, "owner")
-			name  = chi.URLParam(r, "name")
-			slug  = owner + "/" + name
+			owner, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name     = chi.URLParam(r, "name")
+			slug     = owner + "/" + name
 		)
 		user, _ := request.UserFrom(r.Context())
 

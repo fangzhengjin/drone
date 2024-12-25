@@ -1,7 +1,5 @@
 module github.com/drone/drone
 
-replace github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
-
 require (
 	github.com/766b/chi-prometheus v0.0.0-20211217152057-87afa9aa2ca8
 	github.com/99designs/httpsignatures-go v0.0.0-20170731043157-88528bf4ca7e
@@ -96,6 +94,11 @@ require (
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 
-replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
+replace (
+	github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
+	github.com/drone/drone-go => github.com/fangzhengjin/drone-go v1.7.2
+	github.com/drone/drone-ui => github.com/fangzhengjin/drone-ui v2.11.5+incompatible
+	github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
+)
 
 go 1.22.7

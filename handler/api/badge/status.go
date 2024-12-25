@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/drone/drone/core"
@@ -32,7 +33,7 @@ func Handler(
 	builds core.BuildStore,
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		namespace := chi.URLParam(r, "owner")
+		namespace, _ := url.QueryUnescape(chi.URLParam(r, "owner"))
 		name := chi.URLParam(r, "name")
 		ref := r.FormValue("ref")
 		branch := r.FormValue("branch")

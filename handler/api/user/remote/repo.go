@@ -16,6 +16,7 @@ package remote
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -33,9 +34,9 @@ func HandleRepo(repos core.RepositoryService) http.HandlerFunc {
 		var (
 			viewer, _ = request.UserFrom(r.Context())
 
-			owner = chi.URLParam(r, "owner")
-			name  = chi.URLParam(r, "name")
-			slug  = scm.Join(owner, name)
+			owner, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name     = chi.URLParam(r, "name")
+			slug     = scm.Join(owner, name)
 		)
 
 		repo, err := repos.Find(r.Context(), viewer, slug)

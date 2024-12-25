@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !oss
 // +build !oss
 
 package converter
@@ -28,14 +29,14 @@ import (
 // starlark file to a yaml file.
 func Starlark(enabled bool, stepLimit uint64, sizeLimit uint64) core.ConvertService {
 	return &starlarkPlugin{
-		enabled: enabled,
+		enabled:   enabled,
 		stepLimit: stepLimit,
 		sizeLimit: sizeLimit,
 	}
 }
 
 type starlarkPlugin struct {
-	enabled bool
+	enabled   bool
 	stepLimit uint64
 	sizeLimit uint64
 }

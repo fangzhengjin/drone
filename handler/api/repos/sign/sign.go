@@ -17,6 +17,7 @@ package sign
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone-yaml/yaml/signer"
 	"github.com/drone/drone/core"
@@ -34,8 +35,8 @@ type payload struct {
 func HandleSign(repos core.RepositoryStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace = chi.URLParam(r, "owner")
-			name      = chi.URLParam(r, "name")
+			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name         = chi.URLParam(r, "name")
 		)
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {

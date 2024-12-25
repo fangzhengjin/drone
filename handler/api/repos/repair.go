@@ -16,6 +16,7 @@ package repos
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/drone/drone/core"
 	"github.com/drone/drone/handler/api/render"
@@ -36,8 +37,8 @@ func HandleRepair(
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			owner = chi.URLParam(r, "owner")
-			name  = chi.URLParam(r, "name")
+			owner, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
+			name     = chi.URLParam(r, "name")
 		)
 
 		repo, err := repos.FindName(r.Context(), owner, name)
