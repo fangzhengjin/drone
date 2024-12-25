@@ -18,7 +18,7 @@ import (
 )
 
 // HandleFind returns an http.HandlerFunc that writes json-encoded
-// cronjob details to the the response body.
+// cronjob details to the response body.
 func HandleFind(
 	repos core.RepositoryStore,
 	crons core.CronStore,

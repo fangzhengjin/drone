@@ -80,13 +80,14 @@ type (
 		Yaml         Yaml
 
 		// Remote configurations
-		Bitbucket Bitbucket
-		Gitea     Gitea
-		Github    Github
-		GitLab    GitLab
-		Gogs      Gogs
-		Stash     Stash
-		Gitee     Gitee
+		Bitbucket       Bitbucket
+		Gitea           Gitea
+		Github          Github
+		GitLab          GitLab
+		Gogs            Gogs
+		Stash           Stash
+		Gitee           Gitee
+		IncomingWebhook IncomingWebhook
 	}
 
 	// Cloning provides the cloning configuration.
@@ -170,6 +171,7 @@ type (
 	// Prometheus provides the prometheus configuration.
 	Prometheus struct {
 		EnableAnonymousAccess bool `envconfig:"DRONE_PROMETHEUS_ANONYMOUS_ACCESS" default:"false"`
+		EnableHTTPMetrics     bool `envconfig:"DRONE_PROMETHEUS_HTTP_METRICS" default:"false"`
 	}
 
 	// Redis provides the redis configuration.
@@ -353,6 +355,7 @@ type (
 		Server       string   `envconfig:"DRONE_GITEA_SERVER"`
 		ClientID     string   `envconfig:"DRONE_GITEA_CLIENT_ID"`
 		ClientSecret string   `envconfig:"DRONE_GITEA_CLIENT_SECRET"`
+		RedirectURL  string   `envconfig:"DRONE_GITEA_REDIRECT_URL"`
 		SkipVerify   bool     `envconfig:"DRONE_GITEA_SKIP_VERIFY"`
 		Scope        []string `envconfig:"DRONE_GITEA_SCOPE" default:"repo,repo:status,user:email,read:org"`
 		Debug        bool     `envconfig:"DRONE_GITEA_DEBUG"`
@@ -440,6 +443,10 @@ type (
 		ContentTypeNosniff    bool              `envconfig:"DRONE_HTTP_CONTENT_TYPE_NO_SNIFF"`
 		ContentSecurityPolicy string            `envconfig:"DRONE_HTTP_CONTENT_SECURITY_POLICY"`
 		ReferrerPolicy        string            `envconfig:"DRONE_HTTP_REFERRER_POLICY"`
+	}
+
+	IncomingWebhook struct {
+		Events []string `envconfig:"DRONE_INCOMING_WEBHOOK_EVENTS" default:"branch,deployment,push,tag,pull_request"`
 	}
 )
 

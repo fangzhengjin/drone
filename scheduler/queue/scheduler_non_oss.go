@@ -18,6 +18,7 @@
 package queue
 
 import (
+	"context"
 	"time"
 
 	"github.com/drone/drone/core"
@@ -28,13 +29,13 @@ import (
 func New(store core.StageStore, r redisdb.RedisDB) core.Scheduler {
 	if r == nil {
 		return scheduler{
-			queue:     newQueue(store),
+			queue:     newQueue(context.Background(), store),
 			canceller: newCanceller(),
 		}
 	}
 
 	sched := schedulerRedis{
-		queue:          newQueue(store),
+		queue:          newQueue(context.Background(), store),
 		cancellerRedis: newCancellerRedis(r),
 	}
 

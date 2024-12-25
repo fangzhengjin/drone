@@ -1,4 +1,4 @@
-// Copyright 2019 Drone IO, Inc.
+// Copyright 2024 Drone IO, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
 package stages
 
 import (
-	"context"
+	"fmt"
 	"net/http"
-	"net/url"
 	"strconv"
 
 	"github.com/drone/drone/core"
@@ -26,31 +25,22 @@ import (
 	"github.com/go-chi/chi"
 )
 
-var noContext = context.Background()
-
-// HandleApprove returns an http.HandlerFunc that processes http
-// requests to approve a blocked build that is pending review.
-func HandleApprove(
+func HandleDeclineBuild(
 	repos core.RepositoryStore,
 	builds core.BuildStore,
 	stages core.StageStore,
-	sched core.Scheduler,
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			namespace, _ = url.QueryUnescape(chi.URLParam(r, "owner"))
-			name         = chi.URLParam(r, "name")
+			namespace = chi.URLParam(r, "owner")
+			name      = chi.URLParam(r, "name")
 		)
 		buildNumber, err := strconv.ParseInt(chi.URLParam(r, "number"), 10, 64)
 		if err != nil {
 			render.BadRequestf(w, "Invalid build number")
 			return
 		}
-		stageNumber, err := strconv.Atoi(chi.URLParam(r, "stage"))
-		if err != nil {
-			render.BadRequestf(w, "Invalid stage number")
-			return
-		}
+
 		repo, err := repos.FindName(r.Context(), namespace, name)
 		if err != nil {
 			render.NotFoundf(w, "Repository not found")
@@ -61,30 +51,37 @@ func HandleApprove(
 			render.NotFoundf(w, "Build not found")
 			return
 		}
-		stage, err := stages.FindNumber(r.Context(), build.ID, stageNumber)
+
+		stageList, err := stages.List(r.Context(), build.ID)
 		if err != nil {
-			render.NotFoundf(w, "Stage not found")
+			render.NotFoundf(w, "Stages not found")
 			return
 		}
-		if stage.Status != core.StatusBlocked {
-			render.BadRequestf(w, "Cannot approve a Pipeline with Status %q", stage.Status)
-			return
+
+		for _, stage := range stageList {
+			if stage.Status != core.StatusBlocked {
+				err := fmt.Errorf("Cannot decline build with status %q", stage.Status)
+				render.BadRequest(w, err)
+				return
+			}
+
+			stage.Status = core.StatusDeclined
+			err = stages.Update(r.Context(), stage)
+			if err != nil {
+				render.InternalError(w, err)
+				return
+			}
 		}
-		if len(stage.DependsOn) > 0 {
-			stage.Status = core.StatusWaiting
-		} else {
-			stage.Status = core.StatusPending
-		}
-		err = stages.Update(r.Context(), stage)
+
+		build.Status = core.StatusDeclined
+		err = builds.Update(r.Context(), build)
 		if err != nil {
-			render.InternalErrorf(w, "There was a problem approving the Pipeline")
+			render.InternalError(w, err)
 			return
 		}
-		err = sched.Schedule(noContext, stage)
-		if err != nil {
-			render.InternalErrorf(w, "There was a problem scheduling the Pipeline")
-			return
-		}
+		// TODO delete any pending stages from the build queue
+		// TODO update any pending stages to skipped in the database
+		// TODO update the build status to error in the source code management system
 		w.WriteHeader(http.StatusNoContent)
 	}
 }

@@ -18,7 +18,7 @@ import (
 )
 
 // HandleFind returns an http.HandlerFunc that writes json-encoded
-// secret details to the the response body.
+// secret details to the response body.
 func HandleFind(
 	repos core.RepositoryStore,
 	secrets core.SecretStore,
