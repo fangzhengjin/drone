@@ -97,7 +97,7 @@ require (
 replace (
 	github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20200309214505-aa6a9891b09c+incompatible
 	github.com/drone/drone-go => github.com/fangzhengjin/drone-go v1.7.2
-	github.com/drone/drone-ui => github.com/fangzhengjin/drone-ui v2.12.0+incompatible
+	github.com/drone/drone-ui => github.com/fangzhengjin/drone-ui v2.12.0-2024122601+incompatible
 	github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
 )
 
