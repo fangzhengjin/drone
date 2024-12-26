@@ -73,7 +73,7 @@ func HandleLogin(
 		redirect := "/"
 		user, err := users.FindLogin(ctx, account.Login)
 		if err == sql.ErrNoRows {
-			redirect = "/register"
+			// redirect = "/register"
 
 			user = &core.User{
 				Login:     account.Login,
